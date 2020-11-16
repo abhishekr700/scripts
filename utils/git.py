@@ -1,6 +1,10 @@
 import requests as r
 import json
 
+from utils.display import Printer
+
+printer = Printer()
+
 class Github:
     PAT = ""
     def __init__(self, PAT):
@@ -14,11 +18,11 @@ class Github:
             "Authorization": "token {}".format(PAT)
         })
         # print(res)
-        print(res.status_code)
+        # print(res.status_code)
         return res.status_code == '200'
 
     def addSSHKey(self, ssh_public_key):
-        print("Adding KEY:", ssh_public_key)
+        printer.info("» Adding KEY:" + ssh_public_key)
         res = r.post("https://api.github.com/user/keys", headers = {
             "Authorization": "token {}".format(self.PAT),
             "Accept": "application/vnd.github.v3+json"

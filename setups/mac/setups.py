@@ -19,13 +19,13 @@ from gitSetup import gitSetup as gs
 
 
 class MacSetups:
-    def setupShell():
+    def setupShell(self):
         print("Shell Setup")
         MacInstaller.installZsh()
         MacInstaller.installOhMyZsh()
         MacInstaller.installIterm2()    
     
-    def setupGit():
+    def setupGit(self):
         gs()
 
     def setupConfig(self):
@@ -71,10 +71,10 @@ class MacSetups:
         })
         addRes = github.addSSHKey(a['publicKey'])
         if addRes:
-            print(Fore.GREEN,"» SSH Key added successfully")
+            printer.success("» SSH Key added successfully")
         else:
-            print(Fore.RED,"SSH Key Addition Failed", Style.RESET_ALL)
-        print("Testing SSH Access")
+            printer.fail("SSH Key Addition Failed", Style.RESET_ALL)
+        printer.info("» Testing SSH Access")
         cmdRes = runCommandAndGetOutput("ssh -T github.com", [1,255])
         # print(cmdRes)
         out = cmdRes.stderr.decode()
