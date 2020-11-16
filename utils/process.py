@@ -9,16 +9,19 @@ def runCommandInShell(cmd):
     print("Exec > ", cmd, Style.RESET_ALL)
     # print(Style.RESET_ALL)
     res = sp.run(cmd, shell=True)
+    print(res)
     if res.returncode != 0:
         raise RuntimeError("Command Execution failed")
     return res
-    # print(res)
+    print(res)
 
-def runCommandAndGetOutput(cmd):
+def runCommandAndGetOutput(cmd, returnCodes = []):
     res = sp.run(cmd, shell=True, capture_output=True)
-    # print(res)
-    if res.returncode != 0:
+    print(res)
+    if res.returncode not in returnCodes:
         raise RuntimeError("Command Execution failed")
+    # if res.returncode != 0:
+        # raise RuntimeError("Command Execution failed")
     return res
 
 # runCommandAndGetOutput("brew list -1")

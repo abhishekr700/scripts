@@ -2,6 +2,8 @@ import sys,os
 sys.path.append('/Users/abhishekranjan/scripts')
 sys.path.append('../')
 
+from pathlib import Path
+
 from colorama import init
 init()
 from colorama import Fore, Back, Style
@@ -15,7 +17,19 @@ from setups.mac.setups import MacSetups
 # print(setups)
 
 from install.mac.packages.installer import MacInstaller
+from utils.sshConfigManager import SSHConfigManager
+from utils.git import Github
+from utils.process import runCommandInShell, runCommandAndGetOutput
 
+def test():
+    print(Path.home().joinpath(".ssh").resolve())
+    print()
+    res = runCommandInShell("ssh -T github.com")
+    print(res)
+    exit(1)
+    # print(Path("/Users/abhishekranjan/.ssh/config23").exists())
+
+# test()
 
 #
 #  GENERIC FUNCTIONS
@@ -57,6 +71,7 @@ def printMacSetupMenu():
     # print(setups.keys())
     # print(setups.values())
     myDict = MacSetups.__dict__
+    setup = MacSetups()
     allKeys = list(myDict.keys())
     keys = []
     displayKeys = []
@@ -75,9 +90,10 @@ def printMacSetupMenu():
         if choice == 'q':
             break
         choice = int(choice)
-        func = myDict[keys[choice-1]]
+        # func = myDict[keys[choice-1]]
+        func = getattr(MacSetups, keys[choice-1]) 
         # print(func)
-        func()
+        func(setup)
 
 # printSetupMenu()
 
