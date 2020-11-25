@@ -16,6 +16,7 @@ init()
 from colorama import Fore, Back, Style
 
 from gitSetup import gitSetup as gs
+from setups.config import Config
 
 
 class MacSetups:
@@ -29,40 +30,18 @@ class MacSetups:
         gs()
 
     def setupConfig(self):
-        print(Fore.LIGHTCYAN_EX)
-        githubPAT = input("Enter Github PersonalAccessToken(PAT):")
-        gitEmail = input("Enter Email to use with Git:")
-        gitName = input("Enter Name to use with Git:")
-        configDict = {
-            "git": {
-                "name": gitName,
-                "email": gitEmail
-            },
-            "github": {
-                "PAT": githubPAT
-            }
-        }
-        configStr = json.dumps(configDict)
+        config = Config()
+        config.setupConfig()
 
-        print(configStr)
-        f = open("config.json", 'w')
-        f.write(configStr)
-
-    def setupReadConfig(self):
-        f = open("config.json", 'r')
-        configJson = f.readlines()[0]
-        # print(configJson)
-        configDict = json.loads(configJson)
-        # print(configDict)
-        return configDict
 
     def setupSSHKey(self):
-        config = self.setupReadConfig()
+        config = Config()
+        configData = config.readConfig()
         # Personal Access Token
-        PAT = config["github"]["PAT"]
+        PAT = configData["github"]["PAT"]
         github = Github(PAT)
         ssh = SSHConfigManager("/Users/abhishekranjan/.ssh/config")
-        a = ssh.addSSHKey(config['git']['email'])
+        a = ssh.addSSHKey(configData['git']['email'])
         print(a)
         ssh.addSSHConfig("github.com", {
             "HostName": "github.com",

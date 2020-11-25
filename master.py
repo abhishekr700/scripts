@@ -13,6 +13,7 @@ from colorama import Fore, Back, Style
 from setups.mac.gitSetup import gitSetup
 from setups.mac.ethereumBlockchainSetup import setupForEtherBlockchain
 from setups.mac.setups import MacSetups
+from setups.config import Config
 
 # print(setups)
 
@@ -23,9 +24,11 @@ from utils.process import runCommandInShell, runCommandAndGetOutput
 
 def test():
     print(Path.home().joinpath(".ssh").resolve())
-    print()
-    res = runCommandInShell("ssh -T github.com")
-    print(res)
+    config = Config()
+    print(config.checkConfigExists())
+    # print()
+    # res = runCommandInShell("ssh -T github.com")
+    # print(res)
     exit(1)
     # print(Path("/Users/abhishekranjan/.ssh/config23").exists())
 
@@ -44,6 +47,7 @@ def printPackageInstallerMenu():
 
 def printMacPackageInstallerMenu():
     myDict = MacInstaller.__dict__
+    installer = MacInstaller()
     allKeys = list(myDict.keys())
     keys = []
     displayKeys = []
@@ -57,14 +61,15 @@ def printMacPackageInstallerMenu():
         print("MacOS Package Installer Menu:\n")
         for i in range(len(keys)):
             print("{} - {}".format(i+1,displayKeys[i]))
+        print("q - Exit Menu")
 
         choice = input("Selection: ")
         if choice == 'q':
             break
         choice = int(choice)
-        func = myDict[keys[choice-1]]
+        func = getattr(MacInstaller, keys[choice-1])
         # print(func)
-        func()
+        func(installer)
 
 
 def printMacSetupMenu():
@@ -85,6 +90,7 @@ def printMacSetupMenu():
         for i in range(len(keys)):
             print("{} - {}".format(i+1,displayKeys[i]))
             # print(i+1, keys[i])
+        print("q - Exit Menu")
         
         choice = input("Selection:")
         if choice == 'q':
@@ -129,16 +135,12 @@ def printSetupMenuHeader():
 
 def printInstallMenuHeader():
     s = """
-
-  _____           _        _ _   __  __                  
- |_   _|         | |      | | | |  \/  |                 
-   | |  _ __  ___| |_ __ _| | | | \  / | ___ _ __  _   _ 
-   | | | '_ \/ __| __/ _` | | | | |\/| |/ _ \ '_ \| | | |
-  _| |_| | | \__ \ || (_| | | | | |  | |  __/ | | | |_| |
- |_____|_| |_|___/\__\__,_|_|_| |_|  |_|\___|_| |_|\__,_|
-                                                         
-                                                         
-
+  _____           _        _ _     __  __                  
+ |_   _|         | |      | | |   |  \/  |                 
+   | |  _ __  ___| |_ __ _| | |   | \  / | ___ _ __  _   _ 
+   | | | '_ \/ __| __/ _` | | |   | |\/| |/ _ \ '_ \| | | |
+  _| |_| | | \__ \ || (_| | | |   | |  | |  __/ | | | |_| |
+ |_____|_| |_|___/\__\__,_|_|_|   |_|  |_|\___|_| |_|\__,_|
     """
     print(Fore.LIGHTCYAN_EX)
     print(s, Style.RESET_ALL)
@@ -149,6 +151,7 @@ def showMasterMenu():
         print("Master Menu")
         print("1. Setups")
         print("2. Package Install")
+        print("q - Exit Menu")
         inp = input("Select option:")
         if inp == 'q':
             return
