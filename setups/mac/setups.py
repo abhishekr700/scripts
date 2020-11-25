@@ -52,7 +52,7 @@ class MacSetups:
         if addRes:
             printer.success("» SSH Key added successfully")
         else:
-            printer.fail("SSH Key Addition Failed", Style.RESET_ALL)
+            printer.fail("SSH Key Addition Failed")
         printer.info("» Testing SSH Access")
         cmdRes = runCommandAndGetOutput("ssh -T github.com", [1,255])
         # print(cmdRes)
